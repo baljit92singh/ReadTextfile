@@ -1,16 +1,12 @@
-<div style="padding:2rem">
-  <!-- {{textData}} -->
+<div style="padding:2rem"> 
   {{title}}
   <br>
   <div>
-    Start Time {{startTime}}
+    Start Time: {{startTime ? startTime : 0}}
   </div>
   <div>
-    End Time {{endTime}}
-  </div>
-  <!-- <div>
-    Total Time {{totalTime}}
-  </div> -->
+    End Time: {{endTime ? endTime : 0}}
+  </div> 
   <br>
   <div>
     Output:

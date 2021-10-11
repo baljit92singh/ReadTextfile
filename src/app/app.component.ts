@@ -10,7 +10,6 @@ export class AppComponent implements OnInit {
   textData: Array<any> = [];
   startTime: any
   endTime: any
-  totalTime: any
   constructor() {
 
   }
@@ -24,12 +23,12 @@ export class AppComponent implements OnInit {
       .then(data => {
         // Do something with your data
         this.startTime = this.startTimeCal(performance.now());
-        this.findDuplicateWords(data);
+        this.findWords(data);
 
       });
   }
-  findDuplicateWords(str: any) {
-    const strArr = str.split(" ");
+  findWords(str: any) {
+    const strArr = str.split(/\W+/);
     const res: Array<any> = [];
     for (let i = 0; i < strArr.length; i++) {
       if (strArr[i].length > 6)
@@ -39,9 +38,9 @@ export class AppComponent implements OnInit {
           };
         };
     };
-    this.textData = res.sort((a, b) => a > b ? -1 : 1)
-    this.endTime = this.endTimeCal(performance.now());
-    // this.totalTime = this.endTime - this.startTime// time took to run in milliseconds
+    var filterData = res.sort((a, b) => a > b ? -1 : 1)
+    this.textData = [...new Set(filterData)]
+    this.endTime = this.endTimeCal((performance.now())); 
   };
 
   startTimeCal(millis: any) {
@@ -52,6 +51,6 @@ export class AppComponent implements OnInit {
   endTimeCal(millis: any) {
     var minutes = Math.floor(millis / 60000);
     var seconds: any = ((millis % 60000) / 1000).toFixed(0);
-    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+    return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
   } 
 }
