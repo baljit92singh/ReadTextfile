@@ -28,19 +28,25 @@ export class AppComponent implements OnInit {
       });
   }
   findWords(str: any) {
-    const strArr = str.split(/\W+/);
+    var sortedArr = str.split(/\W+/);
+    var count = 1;
     const res: Array<any> = [];
-    for (let i = 0; i < strArr.length; i++) {
-      if (strArr[i].length > 6)
-        if (strArr.indexOf(strArr[i]) !== strArr.lastIndexOf(strArr[i])) {
-          if (!res.includes(strArr[i])) {
-            res.push(strArr[i]);
-          };
-        };
-    };
-    var filterData = res.sort((a, b) => a > b ? -1 : 1)
-    this.textData = [...new Set(filterData)]
-    this.endTime = this.endTimeCal((performance.now())); 
+    for (var i = 0; i < sortedArr.length; i = i + count) {
+      count = 1;
+      for (var j = i + 1; j < sortedArr.length; j++) {
+        if (sortedArr[i].toLowerCase() === sortedArr[j].toLowerCase()) {
+          count++;
+        }
+      }
+      let item = {
+        name: sortedArr[i],
+        count: count
+      }
+      res.push(item)
+    } 
+    // this.textData.sort((a, b) => a.count > b.count ? -1 : 1)
+    this.textData = [...new Set(res)]
+    this.endTime = this.endTimeCal((performance.now()));
   };
 
   startTimeCal(millis: any) {
@@ -52,5 +58,5 @@ export class AppComponent implements OnInit {
     var minutes = Math.floor(millis / 60000);
     var seconds: any = ((millis % 60000) / 1000).toFixed(0);
     return minutes + ":" + (seconds < 10 ? '0' : '') + seconds
-  } 
+  }
 }
