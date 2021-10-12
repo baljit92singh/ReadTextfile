@@ -23,18 +23,19 @@ export class AppComponent implements OnInit {
       .then(data => {
         // Do something with your data
         this.startTime = this.startTimeCal(performance.now());
+        // this.textData = []
         this.findWords(data);
-
       });
   }
   findWords(str: any) {
-    var sortedArr = str.split(/\W+/);
+    var convet = str.split(/\W+/);
+    var sortedArr = convet.map((v: any) => v.toLowerCase())
     var count = 1;
     const res: Array<any> = [];
     for (var i = 0; i < sortedArr.length; i = i + count) {
       count = 1;
       for (var j = i + 1; j < sortedArr.length; j++) {
-        if (sortedArr[i].toLowerCase() === sortedArr[j].toLowerCase()) {
+        if (sortedArr[i] === sortedArr[j]) {
           count++;
         }
       }
@@ -43,9 +44,12 @@ export class AppComponent implements OnInit {
         count: count
       }
       res.push(item)
-    } 
-    // this.textData.sort((a, b) => a.count > b.count ? -1 : 1)
-    this.textData = [...new Set(res)]
+    }
+    console.log(res)
+    var sortData = res.sort((a, b) => a.count > b.count ? -1 : 1);
+    this.textData = sortData.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj["name"]).indexOf(obj["name"]) === pos;
+    })
     this.endTime = this.endTimeCal((performance.now()));
   };
 
