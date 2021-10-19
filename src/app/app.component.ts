@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   }
 
   getBootData() {
-    fetch('/assets/text.txt')
+    fetch('/assets/WarAndPeace.txt')
       .then(response => response.text())
       .then(data => {
         // Do something with your data
@@ -27,18 +27,19 @@ export class AppComponent implements OnInit {
         this.findWords(data);
       });
   }
-  findWords(str: any) {
-    // var convet = str.split(/\W+/);
-    // var convet = str.split(" ");
-    var sortedArr = str.split(" ")
-    // console.log(sortedArr)
+  findWords(str: any) { 
+    var sortedArr = str.replace(".", "").replace(",", "").replace( /\r?\n/g, " ").split(" "); 
+    // var sortedArr = str.split(/\W+/); 
+    // var sortedArr = str.split(" "); 
+    // var sortedArr = str.toString().trim().replace( /\r?\n/g, " ").split(" "); 
+    console.log(sortedArr)
     // var sortedArr = convet.map((v: any) => v.toLowerCase())
     var count = 1;
     const res: Array<any> = [];
     for (var i = 0; i < sortedArr.length; i = i + count) {
       count = 1;
       for (var j = i + 1; j < sortedArr.length; j++) {
-        if (sortedArr[i] == sortedArr[j]) {
+        if (sortedArr[i] === sortedArr[j]) {
           count++;
         }
       }
