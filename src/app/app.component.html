@@ -1,4 +1,4 @@
-<div style="padding:2rem"> 
+<div style="padding:2rem">
   {{title}}
   <br>
   <div>
@@ -6,13 +6,23 @@
   </div>
   <div>
     End Time: {{endTime ? endTime : 0}}
-  </div> 
+  </div>
   <br>
   <div>
     Output:
   </div>
   <br>
-  <div *ngFor="let item of textData.slice(0, 50); let i = index">
+  <!-- <div *ngFor="let item of textData.slice(0, 50); let i = index">
     <span> {{i+1}}-{{item.name}}--{{item.count}}</span>
+  </div> -->
+  <p>Sort the list in descending order of word count and supply the top 50 words by count.</p>
+  <div *ngFor="let item of dataSet.slice(0, 50); let i = index">
+    <span> {{i+1}}-{{item[0]}}--{{item[1]}}</span>
+  </div>
+  <br>
+  <p>Supply the top 50 words by count where the word length is longer than 6 characters.</p>
+  <br>
+  <div *ngFor="let item of dataSetWithLetter.slice(0, 50); let i = index">
+    <span> {{i+1}}-{{item[0]}}--{{item[1]}}</span>
   </div>
 </div>

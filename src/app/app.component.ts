@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   title = '“War and Peace” written by Leo Tolstoy';
-  textData: Array<any> = [];
+  // textData: Array<any> = [];
   startTime: any
   endTime: any
+  dataSet: Array<any> = [];
+  dataSetWithLetter: Array<any> = [];
   constructor() {
 
   }
@@ -22,47 +24,42 @@ export class AppComponent implements OnInit {
       .then(response => response.text())
       .then(data => {
         // Do something with your data
-        this.startTime = this.startTimeCal(performance.now());
-        // this.textData = []
-        this.findWords(data);
+        this.startTime = this.startTimeCal(performance.now()); 
+        this.getCount(data);
       });
   }
-  findWords(str: any) { 
-    var sortedArr = str.replace(".", "").replace(",", "").replace( /\r?\n/g, " ").split(" "); 
-    // var sortedArr = str.split(/\W+/); 
-    // var sortedArr = str.split(" "); 
-    // var sortedArr = str.toString().trim().replace( /\r?\n/g, " ").split(" "); 
-    console.log(sortedArr)
-    // var sortedArr = convet.map((v: any) => v.toLowerCase())
-    var count = 1;
-    const res: Array<any> = [];
-    for (var i = 0; i < sortedArr.length; i = i + count) {
-      count = 1;
-      for (var j = i + 1; j < sortedArr.length; j++) {
-        if (sortedArr[i] === sortedArr[j]) {
-          count++;
-        }
+  
+  getCount(data: any) {
+    let wordsList = data.split(' ');
+    let wordObj: any = {};
+    let sixWordObj: any = {};
+    let wordListLength: number = wordsList.length;
+    for (let i = 0; i < wordListLength; i++) {
+      let wordLength = wordsList[i].length
+      if (wordLength) {
+        let wordCount = wordObj[wordsList[i]];
+        let count = wordCount ? wordCount : 0;
+        wordObj[wordsList[i]] = count + 1;
       }
-      if (sortedArr[i].length > 6) {
-        let item = {
-          name: sortedArr[i],
-          count: count
-        }
-        res.push(item)
-        var sortData = res.sort((a, b) => a.count > b.count ? -1 : 1);
-        // this.textData = sortData
-        this.textData = sortData.filter((obj, pos, arr) => {
-          return arr.map(mapObj => mapObj["name"]).indexOf(obj["name"]) === pos;
-        })
+      if (wordLength > 6) {
+        let wordCount = sixWordObj[wordsList[i]];
+        let count = wordCount ? wordCount : 0;
+        sixWordObj[wordsList[i]] = count + 1;
       }
     }
-    // console.log(res)
+     this.dataSet=this.getHighestOccourance(wordObj, 50);
+     this.dataSetWithLetter=this.getHighestOccourance(sixWordObj, 50);
+    this.endTime = this.endTimeCal(performance.now());
+    // console.log(this.dataSet)
+    // console.log(this.dataSetWithLetter)
+  }
 
-    this.endTime = this.endTimeCal((performance.now()));
+  getHighestOccourance = (obj: any, num: number) => {
+    let reqObj: any ;
+    const sortedList = Object.entries(obj).sort((a:any, b:any) => b[1] - a[1])
+    reqObj=sortedList.slice(0,num)
+    return reqObj;
   };
-
-  
-
   startTimeCal(millis: any) {
     var minutes = Math.floor(millis / 60000);
     var seconds: any = ((millis % 60000) / 1000).toFixed(0);
